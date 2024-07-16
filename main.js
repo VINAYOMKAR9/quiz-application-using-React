@@ -19,21 +19,44 @@ const quizData = [
 const {useState} = React
 
 const Quiz=()=>{
-    const [selectOption,setSelectOtion] = useState('')
-    const handleChange =()=>{
+    const [answers,setAnswers] = useState(Array(quizData.length).fill(null));
+    const [selectOption,setSelectOption] = useState('')
 
+    const [score,setScore] = useState(0);
+
+    console.log(answers)
+
+    const handleChange =(option,index)=>{
+        const newAnswer = [...answers];
+        newAnswer[index] = option;
+        setAnswers(newAnswer)
     }
+
+    const handleSubmitQuiz = () =>{
+        let newScore = 0;
+        answers.forEach((el,index)=>{
+            if(el === quizData[index].answers){
+                newScore+=1
+            }
+        })
+        setScore(newScore)
+    }
+    console.log(score)
 
     return <div>
         {
             quizData.map((questiondata, index) =>{ 
                 return <div key={questiondata.id}>
                  <h4>{questiondata.question}</h4>                
-                {questiondata.options.map((option,index)=>{
-                    return <div key={option + index}> 
+                {questiondata.options.map((option,ind)=>{
+                    return <div key={option + ind}> 
                      
                      <label>
-                        <input type='radio' name={`question -${index}`} value={option} onChange={()=>handleChange(option,index)} />
+                        <input type='radio' name={`question -${index}`} 
+                        value={option} 
+                        checked={answers[index]== option} 
+                        onChange={()=>handleChange(option,index)} 
+                        />
                         {option}
                     </label>
                     </div>
@@ -41,6 +64,8 @@ const Quiz=()=>{
                 </div>
             })
         }
+
+        <button onClick={handleSubmitQuiz}>Submit Quiz</button>
     </div>
 }
 
