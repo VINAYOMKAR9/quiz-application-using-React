@@ -23,6 +23,7 @@ const Quiz=()=>{
     const [selectOption,setSelectOption] = useState('')
 
     const [score,setScore] = useState(0);
+    const[submitted,setSubmitted] = useState(false)
 
     console.log(answers)
 
@@ -40,12 +41,24 @@ const Quiz=()=>{
             }
         })
         setScore(newScore)
+        setSubmitted(true)
     }
     console.log(score)
 
-    return <div>
-        {
-            quizData.map((questiondata, index) =>{ 
+    const handleRestart=()=>{
+        setAnswers(Array(quizData.length).fill(null))
+        setScore(0)
+        setSubmitted(false)
+
+    }
+
+    return (
+    <div>
+
+    {!submitted?
+    <div>
+
+        {  quizData.map((questiondata, index) =>{ 
                 return <div key={questiondata.id}>
                  <h4>{questiondata.question}</h4>                
                 {questiondata.options.map((option,ind)=>{
@@ -67,6 +80,13 @@ const Quiz=()=>{
 
         <button onClick={handleSubmitQuiz}>Submit Quiz</button>
     </div>
+    :
+    <div>
+    <h1> Your score :{score}</h1>    
+    <button onClick={handleRestart}>Restart the quiz again</button>
+    </div>}
+    </div>
+    )
 }
 
 
